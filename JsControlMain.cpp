@@ -36,52 +36,6 @@ void test_publisher() {
 }
 
 class ControlCommandsListener : public SensorDataReaderListener {
-    void on_data_available(DDS::DataReader* reader) {
-        printf("on_data_available\n");
-        ControllerCommands::Seq dataSeq;
-        DDS_SampleInfoSeq infoSeq;
-        DDS_ReturnCode_t rc;
-
-        /* The following narrow function should never fail in our case, as
-         * we have only one reader in the application. It simply performs
-         * only a safe cast of the generic data reader into a specific
-         * HelloWorldDataReader.
-         */
-        ControllerCommands::DataReader *dataReader = ControllerCommands::DataReader::narrow(reader);
-        if (dataReader == NULL) {
-            std::cerr << "! Unable to narrow data reader" << std::endl;
-            return;
-        }
-
-        rc = dataReader->take(
-                dataSeq,
-                infoSeq,
-                DDS_LENGTH_UNLIMITED,
-                DDS_ANY_SAMPLE_STATE,
-                DDS_ANY_VIEW_STATE,
-                DDS_ANY_INSTANCE_STATE);
-        if (rc == DDS_RETCODE_NO_DATA) {
-            return;
-        } else if (rc != DDS_RETCODE_OK) {
-            std::cerr << "! Unable to take data from data reader, error "
-                      << rc << std::endl;
-            return;
-        }
-
-        for (int i = 0; i < dataSeq.length(); ++i) {
-            if (infoSeq[i].valid_data) {
-                // Process the data
-                processData(dataSeq[i]);
-            }
-        }
-
-        rc = dataReader->return_loan(dataSeq, infoSeq);
-        if (rc != DDS_RETCODE_OK) {
-            std::cerr << "! Unable to return loan, error "
-                      << rc << std::endl;
-        }
-    }
-
     void processData(ControllerCommands &commands) {
         printf("on_data_available throttle %d \n", commands.throttle);
     }
@@ -92,9 +46,25 @@ int main(int argc, char **argv) {
     ControlCommandsListener commandsListener;
     sensorSubscriber.subscribeData<ControllerCommands>("JsCommands", &commandsListener);
 
+    SensorSubscriber sensorSubscriber1;
+    ControlCommandsListener commandsListener1;
+    sensorSubscriber1.subscribeData<ControllerCommands>("JsCommands1", &commandsListener1);
+
     DDS_Duration_t send_period = {0, DURATION_MS_1};
 
+    SensorPublisher sensorPublisher;
+    //controlcmd msgdata
+    DDS::DataWriter *dataWriter = sensorPublisher.addDatawriter<ControllerCommands>("JsCommands2");
+    //populate data
+
+
+
+    DdsAutoType<ControllerCommands> controlCommand;
+
+
     while (true) {
+        controlCommand.throttle = 90;
+        sensorPublisher.publishData(dataWriter, controlCommand );
         NDDSUtility::sleep(send_period);
     }
 
