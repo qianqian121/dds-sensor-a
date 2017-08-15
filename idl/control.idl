@@ -1,0 +1,89 @@
+/*****************************************************************************/
+/*         (c) Copyright, Real-Time Innovations, All rights reserved.        */
+/*                                                                           */
+/*         Permission to modify and use for shorternal purposes granted.       */
+/* This software is provided "as is", without warranty, express or implied.  */
+/*                                                                           */
+/*****************************************************************************/
+
+#define NDDS_STANDALONE_TYPE
+
+/* The following constants will be available in the generated code as macros.
+ * If you use #define in an IDL file, the value will be substituite by a
+ * preprocessor before generating the code (this constant won't be available
+ * in your program).
+ */
+const short HELLODDS_MAX_PAYLOAD_SIZE = 8192;
+const short HELLODDS_MAX_STRING_SIZE = 64;
+
+/* This custom structure contains an opaque buffer (blob) of maximum size
+ * 8Kb, an unsigned short and a simple string (max size=64 characters)
+ */
+struct TwistCommands {
+    string<HELLODDS_MAX_STRING_SIZE>             prefix;
+    long                                         sampleId;
+    sequence<octet, HELLODDS_MAX_PAYLOAD_SIZE>   payload;
+};
+
+struct ControllerCommands {
+    boolean     auto_on;
+    short    steer_angle;
+    short    throttle;
+    boolean    deadswitch;
+    short    desired_speed;
+};
+
+struct VehicleTelemetry{
+    short velocity_mph;
+    short velocity_kph;
+    short throttle;
+    short brake;
+    short handWheel;
+    short roadWheel;
+    short isMoving;
+    short vehicleState;
+    short vehicleStatus;
+
+    short gear;
+
+
+};
+
+struct PIControllerData {
+    short proportional_gain;
+    short integral_gain;
+    short integral_effort;
+    short desired_velocity;
+    short velocity_error;
+    short control_effort;
+};
+
+struct SteeringControllerData
+{
+    short proportional_gain;
+    short integral_gain;
+    short derivative_gain;
+    short desired_angle;
+    short steering_error;
+    short control_effort;
+
+    short velocity_mph;
+    short velocity_kph;
+    short handWheel;
+    short roadWheel;
+    short throttle;
+    short brake;
+
+    short pi_kp;
+    short pi_ki;
+    short pi_integral;
+    short pi_control_effort;
+    short desired_velocity;
+
+
+    short throttle_cmd;
+    short brake_cmd;
+    short steering_cmd;
+
+
+};
