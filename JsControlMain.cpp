@@ -77,7 +77,6 @@ void processData(void* data) {
 
 int main(int argc, char **argv) {
     SensorSubscriber sensorSubscriber;
-//    ControlCommandsListener commandsListener;
     sensorSubscriber.subscribeData<ControllerCommands>("JsCommands", processData);
 
     DDS_Duration_t send_period = {0, DURATION_MS_1};
