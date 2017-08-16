@@ -14,11 +14,12 @@
 //## auto_generated
 
 //##   ignore
+#include <string>
+#include <sstream>
+
 #include "ndds/ndds_cpp.h"
 #include "ndds/ndds_namespace_cpp.h"
 #include "SensorDataReaderListener.h"
-#include <string>
-#include <sstream>
 
 //## auto_generated
 

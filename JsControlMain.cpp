@@ -6,12 +6,13 @@
  * \date        08/05/2017
  * \file        JsControlMain.cpp
  */
-#include <SensorSubscriber.h>
-#include <SensorDataReaderListener.h>
+
 #include <iostream>
 #include "control.h"
 #include "controlSupport.h"
 #include "SensorPublisher.h"
+#include <SensorSubscriber.h>
+#include <SensorDataReaderListener.h>
 
 const int DURATION_MS_1 = 1000000;
 const int DURATION_MS_10 = 10000000;
