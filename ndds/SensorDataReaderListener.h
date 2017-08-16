@@ -23,7 +23,7 @@
 
 //## class SensorDataReaderListener
 // The class overrides DDS DataReaderListener interface and defines bus events handlers as virtual functions for user to reload .
-template<class T>
+template<typename T>
 class SensorDataReaderListener : public DDS::DataReaderListener {
     ////    Constructors and destructors    ////
     
@@ -60,19 +60,19 @@ public :
 };
 
 //## class SensorDataReaderListener
-template<class T>
+template<typename T>
 SensorDataReaderListener<T>::SensorDataReaderListener() {
 }
-template<class T>
+template<typename T>
 SensorDataReaderListener<T>::~SensorDataReaderListener() {
 }
 
-template <class T>
+template <typename T>
 void SensorDataReaderListener<T>::on_data_available(DDS::DataReader* reader) {
     //#[ operation on_data_available(DataReader)
     printf("on_data_available\n");
 
-    class T::Seq dataSeq;
+    typename T::Seq dataSeq;
     DDS_SampleInfoSeq infoSeq;
     DDS_ReturnCode_t rc;
 
@@ -81,7 +81,7 @@ void SensorDataReaderListener<T>::on_data_available(DDS::DataReader* reader) {
      * only a safe cast of the generic data reader into a specific
      * HelloWorldDataReader.
      */
-    class T::DataReader *dataReader = T::DataReader::narrow(reader);
+    typename T::DataReader *dataReader = T::DataReader::narrow(reader);
     if (dataReader == NULL) {
         std::cerr << "! Unable to narrow data reader" << std::endl;
         return;
@@ -118,43 +118,43 @@ void SensorDataReaderListener<T>::on_data_available(DDS::DataReader* reader) {
     //#]
 }
 
-template<class T>
+template<typename T>
 void SensorDataReaderListener<T>::processData(void* data)
 {
     printf("data under processing");
 
 }
-template<class T>
+template<typename T>
 void SensorDataReaderListener<T>::on_liveliness_changed(DDS::DataReader* reader, const DDS::LivelinessChangedStatus& status) {
     //#[ operation on_liveliness_changed(DataReader,LivelinessChangedStatus)
     printf("on_liveliness_changed\n");
     //#]
 }
-template<class T>
+template<typename T>
 void SensorDataReaderListener<T>::on_requested_deadline_missed(DDS::DataReader* reader, const DDS::RequestedDeadlineMissedStatus& status) {
     //#[ operation on_requested_deadline_missed(DataReader,RequestedDeadlineMissedStatus)
     printf("on_requested_deadline_missed\n");
     //#]
 }
-template<class T>
+template<typename T>
 void SensorDataReaderListener<T>::on_requested_incompatible_qos(DDS::DataReader* reader, const DDS::RequestedIncompatibleQosStatus& status) {
     //#[ operation on_requested_incompatible_qos(DataReader,RequestedIncompatibleQosStatus)
     printf("on_requested_incompatible_qos\n");
     //#]
 }
-template<class T>
+template<typename T>
 void SensorDataReaderListener<T>::on_sample_lost(DDS::DataReader* reader, const DDS::SampleLostStatus& status) {
     //#[ operation on_sample_lost(DataReader,SampleLostStatus)
     printf("sample lost\n");
     //#]
 }
-template<class T>
+template<typename T>
 void SensorDataReaderListener<T>::on_sample_rejected(DDS::DataReader* reader, const DDS::SampleRejectedStatus& status) {
     //#[ operation on_sample_rejected(DataReader,SampleRejectedStatus)
     printf("sample rejected\n");
     //#]
 }
-template<class T>
+template<typename T>
 void SensorDataReaderListener<T>::on_subscription_matched(DDS::DataReader* reader, const DDS::SubscriptionMatchedStatus& status) {
     //#[ operation on_subscription_matched(DataReader,SubscriptionMatchedStatus)
     printf("on_subscription_matched\n");
