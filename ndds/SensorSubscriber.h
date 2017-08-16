@@ -40,6 +40,9 @@ public :
     
     ////    Additional operations    ////
     template <typename T>
+    void subscribeData(std::string topicName, DDSDataReaderListener *listener);
+
+    template <typename T>
 	void subscribeData(std::string topicName, onDataAvailableCallbackType callback);
     //## auto_generated
 //    SensorTopicStructDataReader* getSensorDataReader() const;
@@ -77,6 +80,31 @@ private :
 //#]
 };
 
+//----------------subscribeData() to subscrbe a specific Topic and attach to an instance of listener
+// topic template T should be a typesupport class and listener needs an instance
+//before calling this function
+
+//next update, add in QOS,may return datareader pointer to user
+template <typename T>
+void SensorSubscriber::subscribeData(std::string topicName, DDSDataReaderListener *listener) {
+    DDS::Topic *topic = createTopic<T>( topicName );
+
+    DDS::Subscriber *subscriber = getSubscriber();
+
+    /* Create the data reader. Since we are using waitsets to receive
+       samples the listener will only be enabled for status. On data
+       available will handeled by the waitset in the main loop
+     */
+    DDS::DataReader *_reader = subscriber->create_datareader(
+            topic, DDS_DATAREADER_QOS_DEFAULT, listener,
+            DDS_STATUS_MASK_ALL);
+//            DDS_STATUS_MASK_NONE & ~DDS_DATA_AVAILABLE_STATUS);
+
+    if (NULL == _reader) {
+        std::stringstream errss;
+        errss << "Failed to create DataReader object";
+    }
+}
 
 //----------------subscribeData() to subscrbe a specific Topic and attach to an instance of listener
 // topic template T should be a typesupport class and listener needs an instance
