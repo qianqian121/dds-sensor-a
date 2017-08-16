@@ -3,7 +3,7 @@ project(dds-sensor-a)
 
 file(GLOB_RECURSE DDS_SOURCES "generated/*cxx" "ndds/*.cpp")
 
-SET(CMAKE_CXX_FLAGS "-std=c++11 -DARCH=x64Linux3gcc4.8.2 -DRTI_UNIX -DRTI_LINUX -DRTI_64BIT -m64 ${CMAKE_CXX_FLAGS}")
+SET(CMAKE_CXX_FLAGS "-std=c++11 -DARCH=x64Linux3gcc5.4.0 -DRTI_UNIX -DRTI_LINUX -DRTI_64BIT -m64 ${CMAKE_CXX_FLAGS}")
 
 find_path(
         NDDS_INCLUDE_DIRS
@@ -14,7 +14,7 @@ find_path(
 find_library(
         NDDS_LIBRARIES
         NAMES nddscore libnddscore
-        HINTS "/opt/rti/lib/x64Linux3gcc4.8.2"
+        HINTS "/opt/rti/lib/x64Linux3gcc5.4.0"
 )
 
 include_directories(${NDDS_INCLUDE_DIRS} ${NDDS_INCLUDE_DIRS}/ndds "generated" "ndds")
