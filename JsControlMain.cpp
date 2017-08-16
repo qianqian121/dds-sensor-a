@@ -65,21 +65,20 @@ void test_sub() {
 }
 #endif
 
-class ControlCommandsListener : public SensorDataReaderListener<ControllerCommands> {
-//    void processData(ControllerCommands &commands) {
-    void processData(void* data) {
-        ControllerCommands *commands = (ControllerCommands *)data;
+
+void processData(void* data) {
+    ControllerCommands *commands = (ControllerCommands *)data;
 
 
 //        printf("on_data_available throttle\n");
-        printf("on_data_available throttle %d \n", commands->throttle);
-    }
-};
+    printf("on_data_available throttle %d \n", commands->throttle);
+}
+
 
 int main(int argc, char **argv) {
     SensorSubscriber sensorSubscriber;
-    ControlCommandsListener commandsListener;
-    sensorSubscriber.subscribeData<ControllerCommands>("JsCommands", &commandsListener);
+//    ControlCommandsListener commandsListener;
+    sensorSubscriber.subscribeData<ControllerCommands>("JsCommands", processData);
 
     DDS_Duration_t send_period = {0, DURATION_MS_1};
 

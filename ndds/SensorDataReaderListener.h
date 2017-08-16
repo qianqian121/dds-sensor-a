@@ -20,7 +20,7 @@
 #include "ndds/ndds_namespace_cpp.h"
 
 //##   ignore
-
+typedef void (*onDataAvailableCallbackType)(void *) ;
 //## class SensorDataReaderListener
 // The class overrides DDS DataReaderListener interface and defines bus events handlers as virtual functions for user to reload .
 template<typename T>
@@ -57,11 +57,19 @@ public :
     
     //## operation on_subscription_matched(DataReader,SubscriptionMatchedStatus)
     virtual void on_subscription_matched(DDS::DataReader* reader, const DDS::SubscriptionMatchedStatus& status);
+
+public:
+    void setOnDataAvailableCallback(onDataAvailableCallbackType f){
+        on_data_available_callback_ = f;
+    }
+
+private:
+    onDataAvailableCallbackType on_data_available_callback_;
 };
 
 //## class SensorDataReaderListener
 template<typename T>
-SensorDataReaderListener<T>::SensorDataReaderListener() {
+SensorDataReaderListener<T>::SensorDataReaderListener() : on_data_available_callback_(nullptr) {
 }
 template<typename T>
 SensorDataReaderListener<T>::~SensorDataReaderListener() {
@@ -105,8 +113,8 @@ void SensorDataReaderListener<T>::on_data_available(DDS::DataReader* reader) {
     for (int i = 0; i < dataSeq.length(); ++i) {
         if (infoSeq[i].valid_data) {
             // Process the data
-            processData(&dataSeq[i]);
-//            processData();
+            if (on_data_available_callback_)
+                on_data_available_callback_(&dataSeq[i]);
         }
     }
 

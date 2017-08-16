@@ -16,6 +16,7 @@
 //##   ignore
 #include "ndds/ndds_cpp.h"
 #include "ndds/ndds_namespace_cpp.h"
+#include "SensorDataReaderListener.h"
 #include <string>
 #include <sstream>
 
@@ -39,7 +40,7 @@ public :
     
     ////    Additional operations    ////
     template <typename T>
-	void subscribeData(std::string topicName, DDSDataReaderListener *listener);
+	void subscribeData(std::string topicName, onDataAvailableCallbackType callback);
     //## auto_generated
 //    SensorTopicStructDataReader* getSensorDataReader() const;
     
@@ -72,6 +73,7 @@ private :
 
 //#[ ignore
     DDS::Subscriber* subscriber;
+    DDS::DataReaderListener *listener;
 //#]
 };
 
@@ -82,11 +84,14 @@ private :
 
 //next update, add in QOS,may return datareader pointer to user
 template <typename T>
-void SensorSubscriber::subscribeData(std::string topicName, DDSDataReaderListener *listener) {
+void SensorSubscriber::subscribeData(std::string topicName, onDataAvailableCallbackType callback) {
     DDS::Topic *topic = createTopic<T>( topicName );
 
     DDS::Subscriber *subscriber = getSubscriber();
 
+    listener = new SensorDataReaderListener<T>();
+    SensorDataReaderListener<T> *sensorDataReaderListener = static_cast<SensorDataReaderListener<T> *>(listener);
+    sensorDataReaderListener->setOnDataAvailableCallback(callback);
     /* Create the data reader. Since we are using waitsets to receive
        samples the listener will only be enabled for status. On data
        available will handeled by the waitset in the main loop
