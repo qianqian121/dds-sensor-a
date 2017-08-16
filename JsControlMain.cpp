@@ -16,6 +16,7 @@
 const int DURATION_MS_1 = 1000000;
 const int DURATION_MS_10 = 10000000;
 
+#if 0
 void test_publisher() {
     SensorPublisher sensorPublisher;
     //controlcmd msgdata
@@ -35,13 +36,7 @@ void test_publisher() {
     }
 }
 
-class ControlCommandsListener : public SensorDataReaderListener {
-    void processData(ControllerCommands &commands) {
-        printf("on_data_available throttle %d \n", commands.throttle);
-    }
-};
-
-int main(int argc, char **argv) {
+void test_sub() {
     SensorSubscriber sensorSubscriber;
     ControlCommandsListener commandsListener;
     sensorSubscriber.subscribeData<ControllerCommands>("JsCommands", &commandsListener);
@@ -65,6 +60,30 @@ int main(int argc, char **argv) {
     while (true) {
         controlCommand.throttle = 90;
         sensorPublisher.publishData(dataWriter, controlCommand );
+        NDDSUtility::sleep(send_period);
+    }
+}
+#endif
+
+class ControlCommandsListener : public SensorDataReaderListener<ControllerCommands> {
+//    void processData(ControllerCommands &commands) {
+    void processData(void* data) {
+        ControllerCommands *commands = (ControllerCommands *)data;
+
+
+//        printf("on_data_available throttle\n");
+        printf("on_data_available throttle %d \n", commands->throttle);
+    }
+};
+
+int main(int argc, char **argv) {
+    SensorSubscriber sensorSubscriber;
+    ControlCommandsListener commandsListener;
+    sensorSubscriber.subscribeData<ControllerCommands>("JsCommands", &commandsListener);
+
+    DDS_Duration_t send_period = {0, DURATION_MS_1};
+
+    while (true) {
         NDDSUtility::sleep(send_period);
     }
 
