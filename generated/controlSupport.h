@@ -44,7 +44,9 @@ implementing generics in C and C++.
 
 #endif
 
-DDS_TYPESUPPORT_CPP(TwistCommandsTypeSupport, TwistCommands);
+DDS_TYPESUPPORT_CPP(
+    TwistCommandsTypeSupport, 
+    TwistCommands);
 
 DDS_DATAWRITER_CPP(TwistCommandsDataWriter, TwistCommands);
 DDS_DATAREADER_CPP(TwistCommandsDataReader, TwistCommandsSeq, TwistCommands);
@@ -73,7 +75,9 @@ implementing generics in C and C++.
 
 #endif
 
-DDS_TYPESUPPORT_CPP(ControllerCommandsTypeSupport, ControllerCommands);
+DDS_TYPESUPPORT_CPP(
+    ControllerCommandsTypeSupport, 
+    ControllerCommands);
 
 DDS_DATAWRITER_CPP(ControllerCommandsDataWriter, ControllerCommands);
 DDS_DATAREADER_CPP(ControllerCommandsDataReader, ControllerCommandsSeq, ControllerCommands);
@@ -102,7 +106,9 @@ implementing generics in C and C++.
 
 #endif
 
-DDS_TYPESUPPORT_CPP(VehicleTelemetryTypeSupport, VehicleTelemetry);
+DDS_TYPESUPPORT_CPP(
+    VehicleTelemetryTypeSupport, 
+    VehicleTelemetry);
 
 DDS_DATAWRITER_CPP(VehicleTelemetryDataWriter, VehicleTelemetry);
 DDS_DATAREADER_CPP(VehicleTelemetryDataReader, VehicleTelemetrySeq, VehicleTelemetry);
@@ -131,7 +137,9 @@ implementing generics in C and C++.
 
 #endif
 
-DDS_TYPESUPPORT_CPP(PIControllerDataTypeSupport, PIControllerData);
+DDS_TYPESUPPORT_CPP(
+    PIControllerDataTypeSupport, 
+    PIControllerData);
 
 DDS_DATAWRITER_CPP(PIControllerDataDataWriter, PIControllerData);
 DDS_DATAREADER_CPP(PIControllerDataDataReader, PIControllerDataSeq, PIControllerData);
@@ -160,7 +168,9 @@ implementing generics in C and C++.
 
 #endif
 
-DDS_TYPESUPPORT_CPP(SteeringControllerDataTypeSupport, SteeringControllerData);
+DDS_TYPESUPPORT_CPP(
+    SteeringControllerDataTypeSupport, 
+    SteeringControllerData);
 
 DDS_DATAWRITER_CPP(SteeringControllerDataDataWriter, SteeringControllerData);
 DDS_DATAREADER_CPP(SteeringControllerDataDataReader, SteeringControllerDataSeq, SteeringControllerData);

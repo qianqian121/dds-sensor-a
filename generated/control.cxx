@@ -30,6 +30,8 @@ or consult the RTI Connext manual.
 
 #include "control.h"
 
+#include <new>
+
 /* ========================================================================= */
 const char *TwistCommandsTYPENAME = "TwistCommands";
 
@@ -154,7 +156,12 @@ RTIBool TwistCommands_initialize_w_params(
     void* buffer = NULL;
     if (buffer) {} /* To avoid warnings */
 
-    if (allocParams) {} /* To avoid warnings */
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (allocParams == NULL) {
+        return RTI_FALSE;
+    }
 
     if (allocParams->allocate_memory){
         sample->prefix= DDS_String_alloc (((HELLODDS_MAX_STRING_SIZE)));
@@ -170,10 +177,11 @@ RTIBool TwistCommands_initialize_w_params(
 
     if (!RTICdrType_initLong(&sample->sampleId)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (allocParams->allocate_memory) {
         DDS_OctetSeq_initialize(&sample->payload  );
+        DDS_OctetSeq_set_absolute_maximum(&sample->payload , ((HELLODDS_MAX_PAYLOAD_SIZE)));
         if (!DDS_OctetSeq_set_maximum(&sample->payload , ((HELLODDS_MAX_PAYLOAD_SIZE)))) {
             return RTI_FALSE;
         }
@@ -213,7 +221,10 @@ void TwistCommands_finalize_w_params(
     if (sample==NULL) {
         return;
     }
-    if (deallocParams) {} /* To avoid warnings */
+
+    if (deallocParams == NULL) {
+        return;
+    }
 
     if (sample->prefix != NULL) {
         DDS_String_free(sample->prefix);
@@ -247,22 +258,31 @@ RTIBool TwistCommands_copy(
     TwistCommands* dst,
     const TwistCommands* src)
 {
+    try {
 
-    if (!RTICdrType_copyStringEx (
-        &dst->prefix, src->prefix, 
-        ((HELLODDS_MAX_STRING_SIZE)) + 1, RTI_FALSE)){
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyLong (
-        &dst->sampleId, &src->sampleId)) { 
-        return RTI_FALSE;
-    }
-    if (!DDS_OctetSeq_copy(&dst->payload ,
-    &src->payload )) {
-        return RTI_FALSE;
-    }
+        if (dst == NULL || src == NULL) {
+            return RTI_FALSE;
+        }
 
-    return RTI_TRUE;
+        if (!RTICdrType_copyStringEx (
+            &dst->prefix, src->prefix, 
+            ((HELLODDS_MAX_STRING_SIZE)) + 1, RTI_FALSE)){
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyLong (
+            &dst->sampleId, &src->sampleId)) { 
+            return RTI_FALSE;
+        }
+        if (!DDS_OctetSeq_copy(&dst->payload ,
+        &src->payload )) {
+            return RTI_FALSE;
+        }
+
+        return RTI_TRUE;
+
+    } catch (std::bad_alloc&) {
+        return RTI_FALSE;
+    }
 }
 
 /**
@@ -274,7 +294,9 @@ RTIBool TwistCommands_copy(
 */
 #define T TwistCommands
 #define TSeq TwistCommandsSeq
+
 #define T_initialize_w_params TwistCommands_initialize_w_params
+
 #define T_finalize_w_params   TwistCommands_finalize_w_params
 #define T_copy       TwistCommands_copy
 
@@ -288,7 +310,9 @@ RTIBool TwistCommands_copy(
 
 #undef T_copy
 #undef T_finalize_w_params
+
 #undef T_initialize_w_params
+
 #undef TSeq
 #undef T
 
@@ -447,27 +471,32 @@ RTIBool ControllerCommands_initialize_w_params(
     ControllerCommands* sample, const struct DDS_TypeAllocationParams_t * allocParams)
 {
 
-    if (allocParams) {} /* To avoid warnings */
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (allocParams == NULL) {
+        return RTI_FALSE;
+    }
 
     if (!RTICdrType_initBoolean(&sample->auto_on)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->steer_angle)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->throttle)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initBoolean(&sample->deadswitch)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->desired_speed)) {
         return RTI_FALSE;
-    }     
+    }
 
     return RTI_TRUE;
 }
@@ -502,7 +531,10 @@ void ControllerCommands_finalize_w_params(
     if (sample==NULL) {
         return;
     }
-    if (deallocParams) {} /* To avoid warnings */
+
+    if (deallocParams == NULL) {
+        return;
+    }
 
 }
 
@@ -528,29 +560,38 @@ RTIBool ControllerCommands_copy(
     ControllerCommands* dst,
     const ControllerCommands* src)
 {
+    try {
 
-    if (!RTICdrType_copyBoolean (
-        &dst->auto_on, &src->auto_on)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->steer_angle, &src->steer_angle)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->throttle, &src->throttle)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyBoolean (
-        &dst->deadswitch, &src->deadswitch)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->desired_speed, &src->desired_speed)) { 
-        return RTI_FALSE;
-    }
+        if (dst == NULL || src == NULL) {
+            return RTI_FALSE;
+        }
 
-    return RTI_TRUE;
+        if (!RTICdrType_copyBoolean (
+            &dst->auto_on, &src->auto_on)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->steer_angle, &src->steer_angle)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->throttle, &src->throttle)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyBoolean (
+            &dst->deadswitch, &src->deadswitch)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->desired_speed, &src->desired_speed)) { 
+            return RTI_FALSE;
+        }
+
+        return RTI_TRUE;
+
+    } catch (std::bad_alloc&) {
+        return RTI_FALSE;
+    }
 }
 
 /**
@@ -562,7 +603,9 @@ RTIBool ControllerCommands_copy(
 */
 #define T ControllerCommands
 #define TSeq ControllerCommandsSeq
+
 #define T_initialize_w_params ControllerCommands_initialize_w_params
+
 #define T_finalize_w_params   ControllerCommands_finalize_w_params
 #define T_copy       ControllerCommands_copy
 
@@ -576,7 +619,9 @@ RTIBool ControllerCommands_copy(
 
 #undef T_copy
 #undef T_finalize_w_params
+
 #undef T_initialize_w_params
+
 #undef TSeq
 #undef T
 
@@ -830,47 +875,52 @@ RTIBool VehicleTelemetry_initialize_w_params(
     VehicleTelemetry* sample, const struct DDS_TypeAllocationParams_t * allocParams)
 {
 
-    if (allocParams) {} /* To avoid warnings */
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (allocParams == NULL) {
+        return RTI_FALSE;
+    }
 
     if (!RTICdrType_initShort(&sample->velocity_mph)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->velocity_kph)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->throttle)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->brake)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->handWheel)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->roadWheel)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->isMoving)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->vehicleState)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->vehicleStatus)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->gear)) {
         return RTI_FALSE;
-    }     
+    }
 
     return RTI_TRUE;
 }
@@ -905,7 +955,10 @@ void VehicleTelemetry_finalize_w_params(
     if (sample==NULL) {
         return;
     }
-    if (deallocParams) {} /* To avoid warnings */
+
+    if (deallocParams == NULL) {
+        return;
+    }
 
 }
 
@@ -931,49 +984,58 @@ RTIBool VehicleTelemetry_copy(
     VehicleTelemetry* dst,
     const VehicleTelemetry* src)
 {
+    try {
 
-    if (!RTICdrType_copyShort (
-        &dst->velocity_mph, &src->velocity_mph)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->velocity_kph, &src->velocity_kph)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->throttle, &src->throttle)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->brake, &src->brake)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->handWheel, &src->handWheel)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->roadWheel, &src->roadWheel)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->isMoving, &src->isMoving)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->vehicleState, &src->vehicleState)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->vehicleStatus, &src->vehicleStatus)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->gear, &src->gear)) { 
-        return RTI_FALSE;
-    }
+        if (dst == NULL || src == NULL) {
+            return RTI_FALSE;
+        }
 
-    return RTI_TRUE;
+        if (!RTICdrType_copyShort (
+            &dst->velocity_mph, &src->velocity_mph)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->velocity_kph, &src->velocity_kph)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->throttle, &src->throttle)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->brake, &src->brake)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->handWheel, &src->handWheel)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->roadWheel, &src->roadWheel)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->isMoving, &src->isMoving)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->vehicleState, &src->vehicleState)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->vehicleStatus, &src->vehicleStatus)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->gear, &src->gear)) { 
+            return RTI_FALSE;
+        }
+
+        return RTI_TRUE;
+
+    } catch (std::bad_alloc&) {
+        return RTI_FALSE;
+    }
 }
 
 /**
@@ -985,7 +1047,9 @@ RTIBool VehicleTelemetry_copy(
 */
 #define T VehicleTelemetry
 #define TSeq VehicleTelemetrySeq
+
 #define T_initialize_w_params VehicleTelemetry_initialize_w_params
+
 #define T_finalize_w_params   VehicleTelemetry_finalize_w_params
 #define T_copy       VehicleTelemetry_copy
 
@@ -999,7 +1063,9 @@ RTIBool VehicleTelemetry_copy(
 
 #undef T_copy
 #undef T_finalize_w_params
+
 #undef T_initialize_w_params
+
 #undef TSeq
 #undef T
 
@@ -1177,31 +1243,36 @@ RTIBool PIControllerData_initialize_w_params(
     PIControllerData* sample, const struct DDS_TypeAllocationParams_t * allocParams)
 {
 
-    if (allocParams) {} /* To avoid warnings */
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (allocParams == NULL) {
+        return RTI_FALSE;
+    }
 
     if (!RTICdrType_initShort(&sample->proportional_gain)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->integral_gain)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->integral_effort)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->desired_velocity)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->velocity_error)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->control_effort)) {
         return RTI_FALSE;
-    }     
+    }
 
     return RTI_TRUE;
 }
@@ -1236,7 +1307,10 @@ void PIControllerData_finalize_w_params(
     if (sample==NULL) {
         return;
     }
-    if (deallocParams) {} /* To avoid warnings */
+
+    if (deallocParams == NULL) {
+        return;
+    }
 
 }
 
@@ -1262,33 +1336,42 @@ RTIBool PIControllerData_copy(
     PIControllerData* dst,
     const PIControllerData* src)
 {
+    try {
 
-    if (!RTICdrType_copyShort (
-        &dst->proportional_gain, &src->proportional_gain)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->integral_gain, &src->integral_gain)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->integral_effort, &src->integral_effort)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->desired_velocity, &src->desired_velocity)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->velocity_error, &src->velocity_error)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->control_effort, &src->control_effort)) { 
-        return RTI_FALSE;
-    }
+        if (dst == NULL || src == NULL) {
+            return RTI_FALSE;
+        }
 
-    return RTI_TRUE;
+        if (!RTICdrType_copyShort (
+            &dst->proportional_gain, &src->proportional_gain)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->integral_gain, &src->integral_gain)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->integral_effort, &src->integral_effort)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->desired_velocity, &src->desired_velocity)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->velocity_error, &src->velocity_error)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->control_effort, &src->control_effort)) { 
+            return RTI_FALSE;
+        }
+
+        return RTI_TRUE;
+
+    } catch (std::bad_alloc&) {
+        return RTI_FALSE;
+    }
 }
 
 /**
@@ -1300,7 +1383,9 @@ RTIBool PIControllerData_copy(
 */
 #define T PIControllerData
 #define TSeq PIControllerDataSeq
+
 #define T_initialize_w_params PIControllerData_initialize_w_params
+
 #define T_finalize_w_params   PIControllerData_finalize_w_params
 #define T_copy       PIControllerData_copy
 
@@ -1314,7 +1399,9 @@ RTIBool PIControllerData_copy(
 
 #undef T_copy
 #undef T_finalize_w_params
+
 #undef T_initialize_w_params
+
 #undef TSeq
 #undef T
 
@@ -1758,87 +1845,92 @@ RTIBool SteeringControllerData_initialize_w_params(
     SteeringControllerData* sample, const struct DDS_TypeAllocationParams_t * allocParams)
 {
 
-    if (allocParams) {} /* To avoid warnings */
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (allocParams == NULL) {
+        return RTI_FALSE;
+    }
 
     if (!RTICdrType_initShort(&sample->proportional_gain)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->integral_gain)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->derivative_gain)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->desired_angle)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->steering_error)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->control_effort)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->velocity_mph)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->velocity_kph)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->handWheel)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->roadWheel)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->throttle)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->brake)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->pi_kp)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->pi_ki)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->pi_integral)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->pi_control_effort)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->desired_velocity)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->throttle_cmd)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->brake_cmd)) {
         return RTI_FALSE;
-    }     
+    }
 
     if (!RTICdrType_initShort(&sample->steering_cmd)) {
         return RTI_FALSE;
-    }     
+    }
 
     return RTI_TRUE;
 }
@@ -1873,7 +1965,10 @@ void SteeringControllerData_finalize_w_params(
     if (sample==NULL) {
         return;
     }
-    if (deallocParams) {} /* To avoid warnings */
+
+    if (deallocParams == NULL) {
+        return;
+    }
 
 }
 
@@ -1899,89 +1994,98 @@ RTIBool SteeringControllerData_copy(
     SteeringControllerData* dst,
     const SteeringControllerData* src)
 {
+    try {
 
-    if (!RTICdrType_copyShort (
-        &dst->proportional_gain, &src->proportional_gain)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->integral_gain, &src->integral_gain)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->derivative_gain, &src->derivative_gain)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->desired_angle, &src->desired_angle)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->steering_error, &src->steering_error)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->control_effort, &src->control_effort)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->velocity_mph, &src->velocity_mph)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->velocity_kph, &src->velocity_kph)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->handWheel, &src->handWheel)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->roadWheel, &src->roadWheel)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->throttle, &src->throttle)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->brake, &src->brake)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->pi_kp, &src->pi_kp)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->pi_ki, &src->pi_ki)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->pi_integral, &src->pi_integral)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->pi_control_effort, &src->pi_control_effort)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->desired_velocity, &src->desired_velocity)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->throttle_cmd, &src->throttle_cmd)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->brake_cmd, &src->brake_cmd)) { 
-        return RTI_FALSE;
-    }
-    if (!RTICdrType_copyShort (
-        &dst->steering_cmd, &src->steering_cmd)) { 
-        return RTI_FALSE;
-    }
+        if (dst == NULL || src == NULL) {
+            return RTI_FALSE;
+        }
 
-    return RTI_TRUE;
+        if (!RTICdrType_copyShort (
+            &dst->proportional_gain, &src->proportional_gain)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->integral_gain, &src->integral_gain)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->derivative_gain, &src->derivative_gain)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->desired_angle, &src->desired_angle)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->steering_error, &src->steering_error)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->control_effort, &src->control_effort)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->velocity_mph, &src->velocity_mph)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->velocity_kph, &src->velocity_kph)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->handWheel, &src->handWheel)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->roadWheel, &src->roadWheel)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->throttle, &src->throttle)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->brake, &src->brake)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->pi_kp, &src->pi_kp)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->pi_ki, &src->pi_ki)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->pi_integral, &src->pi_integral)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->pi_control_effort, &src->pi_control_effort)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->desired_velocity, &src->desired_velocity)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->throttle_cmd, &src->throttle_cmd)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->brake_cmd, &src->brake_cmd)) { 
+            return RTI_FALSE;
+        }
+        if (!RTICdrType_copyShort (
+            &dst->steering_cmd, &src->steering_cmd)) { 
+            return RTI_FALSE;
+        }
+
+        return RTI_TRUE;
+
+    } catch (std::bad_alloc&) {
+        return RTI_FALSE;
+    }
 }
 
 /**
@@ -1993,7 +2097,9 @@ RTIBool SteeringControllerData_copy(
 */
 #define T SteeringControllerData
 #define TSeq SteeringControllerDataSeq
+
 #define T_initialize_w_params SteeringControllerData_initialize_w_params
+
 #define T_finalize_w_params   SteeringControllerData_finalize_w_params
 #define T_copy       SteeringControllerData_copy
 
@@ -2007,7 +2113,9 @@ RTIBool SteeringControllerData_copy(
 
 #undef T_copy
 #undef T_finalize_w_params
+
 #undef T_initialize_w_params
+
 #undef TSeq
 #undef T
 

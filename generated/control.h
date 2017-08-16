@@ -59,7 +59,7 @@ class TwistCommands
 
 NDDSUSERDllExport DDS_TypeCode* TwistCommands_get_typecode(void); /* Type code */
 
-DDS_SEQUENCE(TwistCommandsSeq, TwistCommands);                                        
+DDS_SEQUENCE(TwistCommandsSeq, TwistCommands);
 
 NDDSUSERDllExport
 RTIBool TwistCommands_initialize(
@@ -72,7 +72,7 @@ RTIBool TwistCommands_initialize_ex(
 NDDSUSERDllExport
 RTIBool TwistCommands_initialize_w_params(
     TwistCommands* self,
-    const struct DDS_TypeAllocationParams_t * allocParams);        
+    const struct DDS_TypeAllocationParams_t * allocParams);  
 
 NDDSUSERDllExport
 void TwistCommands_finalize(
@@ -141,7 +141,7 @@ class ControllerCommands
 
 NDDSUSERDllExport DDS_TypeCode* ControllerCommands_get_typecode(void); /* Type code */
 
-DDS_SEQUENCE(ControllerCommandsSeq, ControllerCommands);                                        
+DDS_SEQUENCE(ControllerCommandsSeq, ControllerCommands);
 
 NDDSUSERDllExport
 RTIBool ControllerCommands_initialize(
@@ -154,7 +154,7 @@ RTIBool ControllerCommands_initialize_ex(
 NDDSUSERDllExport
 RTIBool ControllerCommands_initialize_w_params(
     ControllerCommands* self,
-    const struct DDS_TypeAllocationParams_t * allocParams);        
+    const struct DDS_TypeAllocationParams_t * allocParams);  
 
 NDDSUSERDllExport
 void ControllerCommands_finalize(
@@ -228,7 +228,7 @@ class VehicleTelemetry
 
 NDDSUSERDllExport DDS_TypeCode* VehicleTelemetry_get_typecode(void); /* Type code */
 
-DDS_SEQUENCE(VehicleTelemetrySeq, VehicleTelemetry);                                        
+DDS_SEQUENCE(VehicleTelemetrySeq, VehicleTelemetry);
 
 NDDSUSERDllExport
 RTIBool VehicleTelemetry_initialize(
@@ -241,7 +241,7 @@ RTIBool VehicleTelemetry_initialize_ex(
 NDDSUSERDllExport
 RTIBool VehicleTelemetry_initialize_w_params(
     VehicleTelemetry* self,
-    const struct DDS_TypeAllocationParams_t * allocParams);        
+    const struct DDS_TypeAllocationParams_t * allocParams);  
 
 NDDSUSERDllExport
 void VehicleTelemetry_finalize(
@@ -311,7 +311,7 @@ class PIControllerData
 
 NDDSUSERDllExport DDS_TypeCode* PIControllerData_get_typecode(void); /* Type code */
 
-DDS_SEQUENCE(PIControllerDataSeq, PIControllerData);                                        
+DDS_SEQUENCE(PIControllerDataSeq, PIControllerData);
 
 NDDSUSERDllExport
 RTIBool PIControllerData_initialize(
@@ -324,7 +324,7 @@ RTIBool PIControllerData_initialize_ex(
 NDDSUSERDllExport
 RTIBool PIControllerData_initialize_w_params(
     PIControllerData* self,
-    const struct DDS_TypeAllocationParams_t * allocParams);        
+    const struct DDS_TypeAllocationParams_t * allocParams);  
 
 NDDSUSERDllExport
 void PIControllerData_finalize(
@@ -408,7 +408,7 @@ class SteeringControllerData
 
 NDDSUSERDllExport DDS_TypeCode* SteeringControllerData_get_typecode(void); /* Type code */
 
-DDS_SEQUENCE(SteeringControllerDataSeq, SteeringControllerData);                                        
+DDS_SEQUENCE(SteeringControllerDataSeq, SteeringControllerData);
 
 NDDSUSERDllExport
 RTIBool SteeringControllerData_initialize(
@@ -421,7 +421,7 @@ RTIBool SteeringControllerData_initialize_ex(
 NDDSUSERDllExport
 RTIBool SteeringControllerData_initialize_w_params(
     SteeringControllerData* self,
-    const struct DDS_TypeAllocationParams_t * allocParams);        
+    const struct DDS_TypeAllocationParams_t * allocParams);  
 
 NDDSUSERDllExport
 void SteeringControllerData_finalize(

@@ -157,6 +157,12 @@ extern "C" {
         TwistCommands *sample,
         const char * buffer,
         unsigned int length);    
+    NDDSUSERDllExport extern DDS_ReturnCode_t
+    TwistCommandsPlugin_data_to_string(
+        const TwistCommands *sample,
+        char *str,
+        DDS_UnsignedLong *str_size, 
+        const struct DDS_PrintFormatProperty *property);    
 
     NDDSUSERDllExport extern RTIBool
     TwistCommandsPlugin_skip(
@@ -390,6 +396,12 @@ extern "C" {
         ControllerCommands *sample,
         const char * buffer,
         unsigned int length);    
+    NDDSUSERDllExport extern DDS_ReturnCode_t
+    ControllerCommandsPlugin_data_to_string(
+        const ControllerCommands *sample,
+        char *str,
+        DDS_UnsignedLong *str_size, 
+        const struct DDS_PrintFormatProperty *property);    
 
     NDDSUSERDllExport extern RTIBool
     ControllerCommandsPlugin_skip(
@@ -623,6 +635,12 @@ extern "C" {
         VehicleTelemetry *sample,
         const char * buffer,
         unsigned int length);    
+    NDDSUSERDllExport extern DDS_ReturnCode_t
+    VehicleTelemetryPlugin_data_to_string(
+        const VehicleTelemetry *sample,
+        char *str,
+        DDS_UnsignedLong *str_size, 
+        const struct DDS_PrintFormatProperty *property);    
 
     NDDSUSERDllExport extern RTIBool
     VehicleTelemetryPlugin_skip(
@@ -856,6 +874,12 @@ extern "C" {
         PIControllerData *sample,
         const char * buffer,
         unsigned int length);    
+    NDDSUSERDllExport extern DDS_ReturnCode_t
+    PIControllerDataPlugin_data_to_string(
+        const PIControllerData *sample,
+        char *str,
+        DDS_UnsignedLong *str_size, 
+        const struct DDS_PrintFormatProperty *property);    
 
     NDDSUSERDllExport extern RTIBool
     PIControllerDataPlugin_skip(
@@ -1089,6 +1113,12 @@ extern "C" {
         SteeringControllerData *sample,
         const char * buffer,
         unsigned int length);    
+    NDDSUSERDllExport extern DDS_ReturnCode_t
+    SteeringControllerDataPlugin_data_to_string(
+        const SteeringControllerData *sample,
+        char *str,
+        DDS_UnsignedLong *str_size, 
+        const struct DDS_PrintFormatProperty *property);    
 
     NDDSUSERDllExport extern RTIBool
     SteeringControllerDataPlugin_skip(
